@@ -60,7 +60,7 @@ def on_close(ws, close_status_code, close_msg):
 def on_open(ws):
     def run(*args):
         j = 1
-        for i in range(1,1000):
+        for i in range(1,100):
             for collection in load_collection_ids(i):
                 send_dynamic_message(ws, collection['id'], j)
                 j += 1
