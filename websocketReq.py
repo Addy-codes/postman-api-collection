@@ -61,7 +61,7 @@ def on_close(ws, close_status_code, close_msg):
 def on_open(ws):
     def run(*args):
         # Create a ThreadPoolExecutor with 4 workers
-        with ThreadPoolExecutor(max_workers=4) as executor:
+        with ThreadPoolExecutor(max_workers=2) as executor:
             j = 1
             for i in range(1, 100):
                 for collection in load_collection_ids(i):
@@ -69,7 +69,7 @@ def on_open(ws):
                     executor.submit(send_dynamic_message, ws, collection['id'], j)
                     j += 1
                     # if j % 100 == 0:
-                    #     time.sleep(1)
+                    #     time.sleep(5)
     thread = threading.Thread(target=run)
     thread.start()
 
