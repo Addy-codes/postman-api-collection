@@ -3,6 +3,7 @@ import json
 import threading
 import os
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 
 target_dir = 'target3'
@@ -59,15 +60,19 @@ def on_close(ws, close_status_code, close_msg):
 
 def on_open(ws):
     def run(*args):
-        j = 1
-        for i in range(1,100):
-            for collection in load_collection_ids(i):
-                send_dynamic_message(ws, collection['id'], j)
-                j += 1
-                if j % 100 == 0:
-                    time.sleep(1)
+        # Create a ThreadPoolExecutor with 5 workers
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            j = 1
+            for i in range(1, 100):
+                for collection in load_collection_ids(i):
+                    # Submit tasks to the executor
+                    executor.submit(send_dynamic_message, ws, collection['id'], j)
+                    j += 1
+                    # if j % 100 == 0:
+                    #     time.sleep(1)
     thread = threading.Thread(target=run)
     thread.start()
+
 
 def send_dynamic_message(ws, collection_id, n):
     prefix = f"42{n}"
