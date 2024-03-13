@@ -6,7 +6,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 
 
-target_dir = 'target3'
+target_dir = 'target4'
 os.makedirs(target_dir, exist_ok=True)
 
 def load_collection_ids(i):
@@ -60,8 +60,8 @@ def on_close(ws, close_status_code, close_msg):
 
 def on_open(ws):
     def run(*args):
-        # Create a ThreadPoolExecutor with 5 workers
-        with ThreadPoolExecutor(max_workers=10) as executor:
+        # Create a ThreadPoolExecutor with 4 workers
+        with ThreadPoolExecutor(max_workers=4) as executor:
             j = 1
             for i in range(1, 100):
                 for collection in load_collection_ids(i):
