@@ -5,7 +5,7 @@ import os
 import time
 
 
-target_dir = 'target'
+target_dir = 'target1'
 os.makedirs(target_dir, exist_ok=True)
 
 def load_collection_ids(i):
@@ -59,8 +59,8 @@ def on_close(ws, close_status_code, close_msg):
 
 def on_open(ws):
     def run(*args):
-        j = 1
-        for i in range(1,100):
+        j = 7501
+        for i in range(16,100):
             for collection in load_collection_ids(i):
                 send_dynamic_message(ws, collection['id'], j)
                 j += 1
