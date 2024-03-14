@@ -5,8 +5,34 @@ import os
 import time
 
 
-target_dir = 'target1'
+target_dir = 'Try-1'
 os.makedirs(target_dir, exist_ok=True)
+
+def sanitize_name(name):
+    # Define a list of characters that are not allowed in file names
+    illegal_chars = ['|', '\\', '/', '?', '*', ':', '"', '<', '>', '+', '[', ']', ' ']
+    # Replace each illegal character with an underscore
+    for char in illegal_chars:
+        name = name.replace(char, '_')
+    return name
+
+def getName(status_code):
+    # Ensure status_code is an integer
+    status_code = int(status_code)
+    
+    # Calculate file number and position
+    file_no = (status_code - 1) // 500 + 1
+    pos = (status_code - 1) % 500
+    
+    # Construct the filename and read the data
+    filename = f'./Collection_ids/{file_no}.json'
+    with open(filename, 'r') as file_obj:
+        data = json.load(file_obj)
+        name = data[pos]['name']
+        
+    # Sanitize the name before returning
+    sanitized_name = sanitize_name(name)
+    return sanitized_name
 
 def load_collection_ids(i):
     """
@@ -24,8 +50,9 @@ def on_message(ws, message):
             json_start_pos = message.find('[')
             # Extract the status code based on its dynamic length
             if json_start_pos != -1:
-                status_code = message[:json_start_pos].strip()
-                file_name = f"{status_code}.json"
+                status_code = message[2:json_start_pos].strip()
+
+                file_name = status_code + ". " + getName(status_code) + ".json"
                 full_file_path = os.path.join(target_dir, file_name)  # Construct the full file path
 
                 json_content = message[json_start_pos:]
@@ -59,8 +86,8 @@ def on_close(ws, close_status_code, close_msg):
 
 def on_open(ws):
     def run(*args):
-        j = 7501
-        for i in range(16,100):
+        j = 1
+        for i in range(1,100):
             for collection in load_collection_ids(i):
                 send_dynamic_message(ws, collection['id'], j)
                 j += 1
