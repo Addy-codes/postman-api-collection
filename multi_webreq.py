@@ -137,7 +137,7 @@ def reconnect_with_backoff(ws_url):
                                         on_message=on_message,
                                         on_error=on_error,
                                         on_close=on_close)
-            ws.run_forever(ping_timeout=60, ping_interval=30)  # Adjust these values based on your needs
+            ws.run_forever(ping_timeout=30, ping_interval=60)  # Adjust these values based on your needsy
             break  # Exit the loop if run_forever returns without exception (connection closed gracefully)
         except websocket.WebSocketConnectionClosedException as e:
             print(f"Reconnect failed due to closed connection: {e}, retrying...")
