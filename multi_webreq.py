@@ -3,10 +3,14 @@ import json
 import threading
 import os
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 
 target_dir = 'Try-1'
 os.makedirs(target_dir, exist_ok=True)
+
+# Global scope or within the main function
+executor = ThreadPoolExecutor(max_workers=12)  # Adjust max_workers as needed
 
 def sanitize_name(name):
     # Define a list of characters that are not allowed in file names
@@ -85,15 +89,18 @@ def on_close(ws, close_status_code, close_msg):
     pass
 
 def on_open(ws):
-    def run(*args):
+    def send_dynamic_message_for_collection(collection_id, counter):
+        send_dynamic_message(ws, collection_id, counter)
+    
+    def task():
         j = 1
-        for i in range(1,100):
+        for i in range(1, 100):
             for collection in load_collection_ids(i):
-                send_dynamic_message(ws, collection['id'], j)
+                executor.submit(send_dynamic_message_for_collection, collection['id'], j)
                 j += 1
+    # Now, just directly call task without submitting it to an executor here
+    task()
 
-    thread = threading.Thread(target=run)
-    thread.start()
 
 def send_dynamic_message(ws, collection_id, n):
     prefix = f"42{n}"
@@ -130,7 +137,7 @@ def reconnect_with_backoff(ws_url):
                                         on_message=on_message,
                                         on_error=on_error,
                                         on_close=on_close)
-            ws.run_forever(ping_timeout=30)  # Adjust ping_timeout as necessary
+            ws.run_forever(ping_timeout=60, ping_interval=30)  # Adjust these values based on your needs
             break  # Exit the loop if run_forever returns without exception (connection closed gracefully)
         except websocket.WebSocketConnectionClosedException as e:
             print(f"Reconnect failed due to closed connection: {e}, retrying...")
@@ -142,3 +149,5 @@ def reconnect_with_backoff(ws_url):
 if __name__ == "__main__":
     ws_url = "wss://bifrost-web-v4.gw.postman.com/socket.io/?userId=0&teamId=0&os=Windows%2010&type=app_web&version=10.23.12-240308-0814&browser=Chrome%20122&__sails_io_sdk_version=1.2.1&__sails_io_sdk_platform=browser&__sails_io_sdk_language=javascript&EIO=3&transport=websocket"
     reconnect_with_backoff(ws_url)
+    # Remember to shut down the executor when it's no longer needed.
+    executor.shutdown(wait=True)
