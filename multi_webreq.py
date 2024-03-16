@@ -10,7 +10,7 @@ target_dir = 'Try-1'
 os.makedirs(target_dir, exist_ok=True)
 
 # Global scope or within the main function
-executor = ThreadPoolExecutor(max_workers=12)  # Adjust max_workers as needed
+executor = ThreadPoolExecutor(max_workers=20)  # Adjust max_workers as needed
 
 def sanitize_name(name):
     # Define a list of characters that are not allowed in file names
