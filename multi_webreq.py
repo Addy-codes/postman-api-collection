@@ -140,5 +140,5 @@ def reconnect_with_backoff(ws_url):
             backoff = min(backoff * 2, max_backoff)  # Exponential backoff
 
 if __name__ == "__main__":
-    ws_url = "wss://bifrost-web-v4.gw.postman.com/socket.io/?userId=28272125&teamId=0&os=Windows%2010&type=app_web&version=10.23.12-240308-0814&browser=Chrome%20122&__sails_io_sdk_version=1.2.1&__sails_io_sdk_platform=browser&__sails_io_sdk_language=javascript&EIO=3&transport=websocket"
+    ws_url = "wss://bifrost-web-v4.gw.postman.com/socket.io/?userId=0&teamId=0&os=Windows%2010&type=app_web&version=10.23.12-240308-0814&browser=Chrome%20122&__sails_io_sdk_version=1.2.1&__sails_io_sdk_platform=browser&__sails_io_sdk_language=javascript&EIO=3&transport=websocket"
     reconnect_with_backoff(ws_url)
