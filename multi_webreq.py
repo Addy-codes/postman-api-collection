@@ -90,8 +90,8 @@ def on_open(ws):
         send_dynamic_message(ws, collection_id, counter)
     
     def task():
-        j = 34501
-        for i in range(70, 100):
+        j = 49501
+        for i in range(100, 1000):
             for collection in load_collection_ids(i):
                 executor.submit(send_dynamic_message_for_collection, collection['id'], j)
                 j += 1
