@@ -112,7 +112,7 @@ def send_dynamic_message(ws, collection_id, n):
     ]
     formatted_message = json.dumps(message)
     prefixed_message = f"{prefix}{formatted_message}"
-    time.sleep(1)
+    # time.sleep(1)
     ws.send(prefixed_message)
     # print(f"Message sent for collection ID {collection_id}")
 
