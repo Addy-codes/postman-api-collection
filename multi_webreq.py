@@ -9,9 +9,6 @@ from concurrent.futures import ThreadPoolExecutor
 target_dir = 'Try-5'
 os.makedirs(target_dir, exist_ok=True)
 
-# Global scope or within the main function
-executor = ThreadPoolExecutor(max_workers=20)  # Adjust max_workers as needed
-
 def sanitize_name(name):
     # Define a list of characters that are not allowed in file names
     illegal_chars = ['|', '\\', '/', '?', '*', ':', '"', '<', '>', '+', '[', ']', ' ']
@@ -93,8 +90,8 @@ def on_open(ws):
         send_dynamic_message(ws, collection_id, counter)
     
     def task():
-        j = 22001
-        for i in range(45, 100):
+        j = 29001
+        for i in range(59, 100):
             for collection in load_collection_ids(i):
                 executor.submit(send_dynamic_message_for_collection, collection['id'], j)
                 j += 1
@@ -147,6 +144,8 @@ def reconnect_with_backoff(ws_url):
             backoff = min(backoff * 2, max_backoff)  # Exponential backoff
 
 if __name__ == "__main__":
+    # Global scope or within the main function
+    executor = ThreadPoolExecutor(max_workers=20)  # Adjust max_workers as needed
     ws_url = "wss://bifrost-web-v4.gw.postman.com/socket.io/?userId=0&teamId=0&os=Windows%2010&type=app_web&version=10.23.12-240308-0814&browser=Chrome%20122&__sails_io_sdk_version=1.2.1&__sails_io_sdk_platform=browser&__sails_io_sdk_language=javascript&EIO=3&transport=websocket"
     reconnect_with_backoff(ws_url)
     # Remember to shut down the executor when it's no longer needed.
