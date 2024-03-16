@@ -6,7 +6,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 
 
-target_dir = 'Try-1'
+target_dir = 'Try-2'
 os.makedirs(target_dir, exist_ok=True)
 
 # Global scope or within the main function
