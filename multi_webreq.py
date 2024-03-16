@@ -10,7 +10,7 @@ target_dir = 'Try-5'
 os.makedirs(target_dir, exist_ok=True)
 
 # Global scope or within the main function
-executor = ThreadPoolExecutor(max_workers=20)  # Adjust max_workers as needed
+executor = ThreadPoolExecutor(max_workers=2)  # Adjust max_workers as needed
 
 def sanitize_name(name):
     # Define a list of characters that are not allowed in file names
@@ -93,8 +93,8 @@ def on_open(ws):
         send_dynamic_message(ws, collection_id, counter)
     
     def task():
-        j = 20001
-        for i in range(41, 100):
+        j = 22001
+        for i in range(45, 100):
             for collection in load_collection_ids(i):
                 executor.submit(send_dynamic_message_for_collection, collection['id'], j)
                 j += 1
