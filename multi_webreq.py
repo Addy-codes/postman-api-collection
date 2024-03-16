@@ -6,7 +6,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 
 
-target_dir = 'Try-4'
+target_dir = 'Try-5'
 os.makedirs(target_dir, exist_ok=True)
 
 # Global scope or within the main function
@@ -119,7 +119,7 @@ def send_dynamic_message(ws, collection_id, n):
     ]
     formatted_message = json.dumps(message)
     prefixed_message = f"{prefix}{formatted_message}"
-    # time.sleep(1)
+    time.sleep(2)
     ws.send(prefixed_message)
     # print(f"Message sent for collection ID {collection_id}")
 
